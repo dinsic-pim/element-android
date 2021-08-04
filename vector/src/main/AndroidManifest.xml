@@ -180,27 +180,10 @@
         <activity android:name=".features.createdirect.CreateDirectRoomActivity" />
         <activity android:name=".features.invite.InviteUsersToRoomActivity" />
         <activity android:name=".features.webview.VectorWebViewActivity" />
-        <activity
-            android:name=".features.link.LinkHandlerActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="https" />
-                <data android:host="riot.im" />
-                <data android:host="app.element.io" />
-                <data android:host="mobile.element.io" />
-                <data android:host="develop.element.io" />
-                <data android:host="staging.element.io" />
-            </intent-filter>
-        </activity>
-
         <activity-alias
             android:name=".features.permalink.PermalinkHandlerActivity"
             android:exported="true"
+            android:enabled="false"
             android:launchMode="singleTask"
             android:targetActivity=".features.link.LinkHandlerActivity">
             <intent-filter>
