@@ -277,25 +277,10 @@ class HomeActivity :
     }
 
     private fun handleIntent(intent: Intent?) {
-        intent?.dataString?.let { deepLink ->
-            val resolvedLink = when {
-                deepLink.startsWith(PermalinkService.MATRIX_TO_URL_BASE) -> deepLink
-                deepLink.startsWith(MATRIX_TO_CUSTOM_SCHEME_URL_BASE)    -> {
-                    // This is a bit ugly, but for now just convert to matrix.to link for compatibility
-                    when {
-                        deepLink.startsWith(USER_LINK_PREFIX) -> deepLink.substring(USER_LINK_PREFIX.length)
-                        deepLink.startsWith(ROOM_LINK_PREFIX) -> deepLink.substring(ROOM_LINK_PREFIX.length)
-                        else                                  -> null
-                    }?.let {
-                        activeSessionHolder.getSafeActiveSession()?.permalinkService()?.createPermalink(it)
-                    }
-                }
-                else                                                     -> return@let
-            }
-
+        intent?.data?.let { deeplink ->
             permalinkHandler.launch(
                     context = this,
-                    deepLink = resolvedLink,
+                    deepLink = deeplink,
                     navigationInterceptor = this,
                     buildTask = true
             )
@@ -303,9 +288,11 @@ class HomeActivity :
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { isHandled ->
                         if (!isHandled) {
+                            val isMatrixToLink = deeplink.toString().startsWith(PermalinkService.MATRIX_TO_URL_BASE) ||
+                                    deeplink.toString().startsWith(PermalinkService.MATRIX_TO_CUSTOM_SCHEME_URL_BASE)
                             MaterialAlertDialogBuilder(this)
                                     .setTitle(R.string.dialog_title_error)
-                                    .setMessage(R.string.permalink_malformed)
+                                    .setMessage(if (isMatrixToLink) R.string.permalink_malformed else R.string.universal_link_malformed)
                                     .setPositiveButton(R.string.ok, null)
                                     .show()
                         }
@@ -572,10 +559,6 @@ class HomeActivity :
                         putExtra(MvRx.KEY_ARG, args)
                     }
         }
-
-        private const val MATRIX_TO_CUSTOM_SCHEME_URL_BASE = "element://"
-        private const val ROOM_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}room/"
-        private const val USER_LINK_PREFIX = "${MATRIX_TO_CUSTOM_SCHEME_URL_BASE}user/"
     }
 
     override fun create(initialState: ActiveSpaceViewState) = promoteRestrictedViewModelFactory.create(initialState)
