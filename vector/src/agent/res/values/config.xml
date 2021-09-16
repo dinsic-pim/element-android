@@ -60,8 +60,9 @@
     <string name="pusher_app_id" translatable="false">fr.gouv.tchap.a.android</string>
 
     <!-- Permalink config -->
-    <string name="permalink_prefix" translatable="false">https://tchap.gouv.fr</string>
+    <string name="permalink_prefix" translatable="false">https://tchap.gouv.fr/#/</string>
     <string-array name="permalink_supported_hosts" translatable="false">
+        <!-- Tchap permalink host -->
         <item>tchap.gouv.fr</item>
         <item>www.tchap.gouv.fr</item>
     </string-array>
