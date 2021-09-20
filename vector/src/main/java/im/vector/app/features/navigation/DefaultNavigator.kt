@@ -28,8 +28,8 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
-import fr.gouv.tchap.features.login.TchapLoginActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import fr.gouv.tchap.features.login.TchapLoginActivity
 import im.vector.app.AppStateHandler
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
@@ -86,6 +86,7 @@ import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
 import im.vector.app.space
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
+import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.terms.TermsService
@@ -172,16 +173,24 @@ class DefaultNavigator @Inject constructor(
 
     override fun requestSessionVerification(context: Context, otherSessionId: String) {
         val session = sessionHolder.getSafeActiveSession() ?: return
-        val pr = session.cryptoService().verificationService().requestKeyVerification(
-                supportedVerificationMethodsProvider.provide(),
-                session.myUserId,
-                listOf(otherSessionId)
-        )
+
+        val txId = if (session.cryptoService().crossSigningService().getMyCrossSigningKeys() == null) {
+            session.cryptoService()
+                    .verificationService()
+                    .beginKeyVerification(VerificationMethod.SAS, session.myUserId, otherSessionId, null)
+        } else {
+            session.cryptoService().verificationService().requestKeyVerification(
+                    supportedVerificationMethodsProvider.provide(),
+                    session.myUserId,
+                    listOf(otherSessionId)
+            ).transactionId
+        }
+
         if (context is AppCompatActivity) {
             VerificationBottomSheet.withArgs(
                     roomId = null,
                     otherUserId = session.myUserId,
-                    transactionId = pr.transactionId
+                    transactionId = txId
             ).show(context.supportFragmentManager, VerificationBottomSheet.WAITING_SELF_VERIF_TAG)
         }
     }
