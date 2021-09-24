@@ -24,6 +24,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import fr.gouv.tchap.features.home.contact.list.TchapContactListFragment
 import fr.gouv.tchap.features.login.TchapLoginFragment
+import fr.gouv.tchap.features.login.TchapLoginResetPasswordFragment
 import fr.gouv.tchap.features.login.TchapWelcomeFragment
 import fr.gouv.tchap.features.login.registration.TchapRegisterFragment
 import fr.gouv.tchap.features.login.registration.TchapRegisterWaitForEmailFragment
@@ -81,7 +82,6 @@ import im.vector.app.features.login2.LoginFragmentSigninPassword2
 import im.vector.app.features.login2.LoginFragmentSigninUsername2
 import im.vector.app.features.login2.LoginFragmentSignupPassword2
 import im.vector.app.features.login2.LoginFragmentSignupUsername2
-import im.vector.app.features.login2.created.AccountCreatedFragment
 import im.vector.app.features.login2.LoginFragmentToAny2
 import im.vector.app.features.login2.LoginGenericTextInputFormFragment2
 import im.vector.app.features.login2.LoginResetPasswordFragment2
@@ -93,6 +93,7 @@ import im.vector.app.features.login2.LoginSplashSignUpSignInSelectionFragment2
 import im.vector.app.features.login2.LoginSsoOnlyFragment2
 import im.vector.app.features.login2.LoginWaitForEmailFragment2
 import im.vector.app.features.login2.LoginWebFragment2
+import im.vector.app.features.login2.created.AccountCreatedFragment
 import im.vector.app.features.login2.terms.LoginTermsFragment2
 import im.vector.app.features.matrixto.MatrixToRoomSpaceFragment
 import im.vector.app.features.matrixto.MatrixToUserFragment
@@ -119,12 +120,9 @@ import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
-import im.vector.app.features.settings.notifications.VectorSettingsAdvancedNotificationPreferenceFragment
 import im.vector.app.features.settings.VectorSettingsGeneralFragment
 import im.vector.app.features.settings.VectorSettingsHelpAboutFragment
 import im.vector.app.features.settings.VectorSettingsLabsFragment
-import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
-import im.vector.app.features.settings.notifications.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.app.features.settings.VectorSettingsPinFragment
 import im.vector.app.features.settings.VectorSettingsPreferencesFragment
 import im.vector.app.features.settings.VectorSettingsSecurityPrivacyFragment
@@ -139,6 +137,9 @@ import im.vector.app.features.settings.devtools.OutgoingKeyRequestListFragment
 import im.vector.app.features.settings.homeserver.HomeserverSettingsFragment
 import im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment
 import im.vector.app.features.settings.locale.LocalePickerFragment
+import im.vector.app.features.settings.notifications.VectorSettingsAdvancedNotificationPreferenceFragment
+import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
+import im.vector.app.features.settings.notifications.VectorSettingsNotificationsTroubleshootFragment
 import im.vector.app.features.settings.push.PushGatewaysFragment
 import im.vector.app.features.settings.push.PushRulesFragment
 import im.vector.app.features.settings.threepids.ThreePidsSettingsFragment
@@ -783,7 +784,12 @@ interface FragmentModule {
     @Binds
     @IntoMap
     @FragmentKey(TchapContactListFragment::class)
-    fun bindTchapContactListFragmentt(fragment: TchapContactListFragment): Fragment
+    fun bindTchapContactListFragment(fragment: TchapContactListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(TchapLoginResetPasswordFragment::class)
+    fun bindTchapLoginResetPasswordFragment(fragment: TchapLoginResetPasswordFragment): Fragment
 
     @Binds
     @IntoMap
