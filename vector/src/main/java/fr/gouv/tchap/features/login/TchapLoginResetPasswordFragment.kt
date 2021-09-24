@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.login
+package fr.gouv.tchap.features.login
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -27,19 +27,21 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
-import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.hidePassword
+import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginResetPasswordBinding
+import im.vector.app.features.login.AbstractLoginFragment
+import im.vector.app.features.login.LoginAction
+import im.vector.app.features.login.LoginViewState
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.subscribeBy
-
 import javax.inject.Inject
 
 /**
  * In this screen, the user is asked for email and new password to reset his password
  */
-class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordBinding>() {
+class TchapLoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<FragmentLoginResetPasswordBinding>() {
 
     // Show warning only once
     private var showWarning = true
